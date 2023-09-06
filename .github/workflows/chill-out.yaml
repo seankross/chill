@@ -1,0 +1,17 @@
+name: chill-out
+
+on:
+  schedule:
+    - cron: '0 19 * * *'
+
+jobs:
+  site-builder:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - run: mkdir -p data-raw && curl -s https://www.thebiggchill.com/flavors -o "data-raw/$(date +%Y-%m-%dT%H:%M:%S%z).html"
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: more chill
