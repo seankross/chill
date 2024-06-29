@@ -1,0 +1,49 @@
+---
+title: "Chill"
+output: html_document
+date: "`r as.character(Sys.Date())`"
+---
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(rvest)
+library(here)
+library(fs)
+library(DT)
+
+chills <- "data-raw" |> here() |> dir_ls()
+
+flavors <- chills |> map(function(x){
+  x |> 
+    read_html() |> 
+    html_nodes(".div-block-34") |> 
+    html_elements("a") |> 
+    html_text2() |> 
+    map(strsplit, split = "\n") |> 
+    unlist() |> 
+    discard(negate(nzchar)) |> 
+    str_trim()
+})
+
+bcdf <- flavors |> imap(
+  ~tibble(Date = .y |> basename() |> tools::file_path_sans_ext() |> ymd_hms() |> date(), 
+          Flavor = .x |> str_to_title())
+) |> 
+  bind_rows()
+
+bcdf |> 
+  group_by(Flavor) |> 
+  count() |> 
+  ungroup() |> 
+  left_join(
+    bcdf |> 
+      group_by(Flavor) |> 
+      arrange(desc(Date)) |> 
+      slice(1) |> 
+      ungroup() |> 
+      arrange(Date)
+  ) |> 
+  arrange(desc(n)) |> 
+  rename(N = n, Last_Seen = Date) |> 
+  datatable(options = list(pageLength = 100))
+```
