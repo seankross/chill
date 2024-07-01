@@ -17,6 +17,7 @@ jobs:
           commit_message: more chill
           commit_author: Author <actions@github.com>
   site-builder:
+    needs: chill-builder
     runs-on: macos-latest
     permissions:
       contents: write
