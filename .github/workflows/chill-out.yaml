@@ -27,7 +27,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
       - run: Rscript -e 'install.packages(c("rmarkdown", "tidyverse", "rvest", "here", "fs", "DT"), dependencies = TRUE)'
       - run: Rscript -e 'rmarkdown::render("index.Rmd")'
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: chill website updated
           commit_author: Author <actions@github.com>
