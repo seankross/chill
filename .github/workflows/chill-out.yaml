@@ -1,12 +1,14 @@
 name: chill-out
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 19 * * *'
 
 jobs:
   chill-builder:
     runs-on: macos-latest
+    if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions:
       contents: write
     steps:
