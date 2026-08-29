@@ -5,6 +5,7 @@ date: "`r as.character(Sys.Date())`"
 ---
 
 ```{r, echo=FALSE, message=FALSE}
+# Load packages for data manipulation, scraping, and table display
 library(tidyverse)
 library(rvest)
 library(here)
